@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitHack - Hacker Habit Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #00ff00;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #00ff00;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .logo span {
+            color: #ff0000;
+        }
+
+        .nav-links a {
+            color: #00ff00;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            padding: 10px 20px;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border: 1px solid #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #00ff00;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #00ff00; }
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            color: #00ff00;
+            opacity: 0.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: transparent;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 100px 0;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .feature-card h3 {
+            color: #ff0000;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .feature-card p {
+            color: #00ff00;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid #00ff00;
+            margin-top: 100px;
+            color: #00ff00;
+            opacity: 0.7;
+        }
+
+        .glitch {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            .nav-links {
+                display: none;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrixCanvas"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">Habit<span>Hack</span></div>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="#features">Features</a>
+                <a href="/login.html">Login</a>
+                <a href="/register.html" class="btn">Get Started</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1 class="glitch">Hack Your <span style="color:#ff0000">Habits</span></h1>
+            <div class="typewriter">
+                <p>Track. Analyze. Conquer. The ultimate hacker's productivity tool.</p>
+            </div>
+            <div class="cta-buttons">
+                <a href="/register.html" class="btn">Start Hacking</a>
+                <a href="#features" class="btn">Learn More</a>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="feature-card">
+                <h3>📊 Real-time Analytics</h3>
+                <p>Monitor your habit streaks with detailed graphs and statistics. Watch your progress in real-time.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔐 Secure & Private</h3>
+                <p>Your data is encrypted and secure. We don't sell or share your personal information.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 Cross-Platform</h3>
+                <p>Access your habit tracker from any device. Syncs automatically across all platforms.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Smart Reminders</h3>
+                <p>Get intelligent notifications to keep you on track with your goals.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📈 Progress Charts</h3>
+                <p>Visualize your journey with interactive charts and progress reports.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ Fast & Lightweight</h3>
+                <p>Built for speed. No bloat, just pure productivity hacking.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 HabitHack. All systems operational. 🚀</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">v1.0.0 | Status: <span style="color:#00ff00;">● ONLINE</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Matrix background effect
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        document.getElementById('matrixCanvas').appendChild(canvas);
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "01";
+        const chars = matrix.split("");
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for(let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

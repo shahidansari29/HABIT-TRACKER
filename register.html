@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - HabitHack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo span {
+            color: #ff0000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(0, 255, 0, 0.5);
+        }
+
+        .strength-meter {
+            height: 4px;
+            background: #333;
+            margin-top: 5px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            background: #ff0000;
+        }
+
+        .strength-meter-fill.medium {
+            background: #ffff00;
+        }
+
+        .strength-meter-fill.strong {
+            background: #00ff00;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 30px #00ff00;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .links a {
+            color: #00ff00;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .links a:hover {
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .error-message {
+            color: #ff0000;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .success-message {
+            color: #00ff00;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .terminal-text {
+            color: #00ff00;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+            font-size: 0.8em;
+            opacity: 0.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .requirements {
+            font-size: 0.8em;
+            color: rgba(0, 255, 0, 0.7);
+            margin-top: 5px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="grid-overlay"></div>
+        <div class="logo">Habit<span>Hack</span></div>
+        
+        <div class="terminal-text">
+$> System: User Registration Protocol<br>
+$> Status: Initializing new user account<br>
+$> Security Level: MAXIMUM<br>
+$> Please provide credentials...
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Enter your codename">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="user@habithack.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create secure password" oninput="checkPasswordStrength()">
+                <div class="strength-meter">
+                    <div class="strength-meter-fill" id="strengthMeter"></div>
+                </div>
+                <div class="requirements" id="passwordRequirements">
+                    Requirements: 8+ chars, uppercase, lowercase, number, special char
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Re-enter password">
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <div class="links">
+            <a href="/login.html">Already have account?</a> | 
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const meter = document.getElementById('strengthMeter');
+            const requirements = document.getElementById('passwordRequirements');
+            
+            requirements.style.display = 'block';
+            
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 25;
+            
+            // Upper and lower case check
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+            
+            // Number check
+            if (/\d/.test(password)) strength += 25;
+            
+            // Special character check
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+            
+            meter.style.width = strength + '%';
+            
+            if (strength < 50) {
+                meter.className = 'strength-meter-fill';
+            } else if (strength < 75) {
+                meter.className = 'strength-meter-fill medium';
+            } else {
+                meter.className = 'strength-meter-fill strong';
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Basic validation
+            if (password !== confirmPassword) {
+                errorMessage.textContent = '✗ Passwords do not match';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 8) {
+                errorMessage.textContent = '✗ Password must be at least 8 characters';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    successMessage.textContent = '✓ Account created successfully. Redirecting...';
+                    successMessage.style.display = 'block';
+                    
+                    const terminal = document.querySelector('.terminal-text');
+                    terminal.innerHTML += `<br>$> Registration: SUCCESS<br>$> Creating user profile...<br>$> Redirecting to Dashboard...`;
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 2000);
+                } else {
+                    errorMessage.textContent = '✗ ' + (data.error || 'Registration failed');
+                    errorMessage.style.display = 'block';
+                    
+                    const terminal = document.querySelector('.terminal-text');
+                    terminal.innerHTML += `<br>$> Registration: FAILED<br>$> Reason: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                errorMessage.textContent = '✗ Connection error. Please try again.';
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // Input focus effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    const terminal = document.querySelector('.terminal-text');
+                    terminal.innerHTML += `<br>$> Input focus: ${input.placeholder || input.name}`;
+                });
+                
+                // Add typing sound effect simulation
+                input.addEventListener('input', () => {
+                    if (input.type === 'password') {
+                        const terminal = document.querySelector('.terminal-text');
+                        terminal.innerHTML += `<br>$> Password strength: Calculating...`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
